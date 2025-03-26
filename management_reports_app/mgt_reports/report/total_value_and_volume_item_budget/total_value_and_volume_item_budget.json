@@ -1,0 +1,40 @@
+{
+ "add_total_row": 0,
+ "columns": [],
+ "creation": "2025-02-08 13:11:31.530617",
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [],
+ "idx": 0,
+ "is_standard": "Yes",
+ "letter_head": "Letter",
+ "letterhead": null,
+ "modified": "2025-02-08 14:04:32.256870",
+ "modified_by": "Administrator",
+ "module": "General Biz Apps",
+ "name": "Total Value And Volume Item Budget",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "ref_doctype": "Volume Budget",
+ "report_name": "Total Value And Volume Item Budget",
+ "report_type": "Script Report",
+ "roles": [
+  {
+   "role": "Accounts Manager"
+  },
+  {
+   "role": "Accounts User"
+  },
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Sales Manager"
+  },
+  {
+   "role": "Sales User"
+  }
+ ],
+ "timeout": 0
+}
