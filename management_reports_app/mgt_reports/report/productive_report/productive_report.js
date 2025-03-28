@@ -3,11 +3,11 @@
 
 
 
-frappe.provide("general_biz_apps.productive_report");
+frappe.provide("management_reports_app.productive_report");
 
 
 
-general_biz_apps.productive_report = {
+management_reports_app.productive_report = {
 	filters: get_filters(),
 	baseData: null,
 	formatter: function (value, row, column, data, default_formatter) {
@@ -299,6 +299,6 @@ function get_filters() {
 }
 
 
-frappe.query_reports["Productive Report"] = $.extend({}, general_biz_apps.productive_report);
+frappe.query_reports["Productive Report"] = $.extend({}, management_reports_app.productive_report);
 
 
