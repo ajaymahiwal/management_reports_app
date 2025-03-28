@@ -5,11 +5,11 @@
 
 
 
-frappe.provide("general_biz_apps.monthly_actual_vs_budget");
+frappe.provide("management_reports_app.monthly_actual_vs_budget");
 
 
 
-general_biz_apps.monthly_actual_vs_budget = {
+management_reports_app.monthly_actual_vs_budget = {
 	filters: get_filters(),
 	baseData: null,
 	// formatter: function (value, row, column, data, default_formatter, filter) {
@@ -373,7 +373,7 @@ function get_filters() {
 }
 
 
-frappe.query_reports["Monthly Actual Vs Budget"] = $.extend({}, general_biz_apps.monthly_actual_vs_budget);
+frappe.query_reports["Monthly Actual Vs Budget"] = $.extend({}, management_reports_app.monthly_actual_vs_budget);
 
 
 

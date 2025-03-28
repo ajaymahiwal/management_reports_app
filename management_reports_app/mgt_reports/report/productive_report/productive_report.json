@@ -10,25 +10,15 @@
  "is_standard": "Yes",
  "letter_head": "Letter",
  "letterhead": null,
- "modified": "2025-03-18 17:08:17.656527",
+ "modified": "2025-03-28 16:57:04.530953",
  "modified_by": "Administrator",
- "module": "General Biz Apps",
+ "module": "MGT Reports",
  "name": "Productive Report",
  "owner": "Administrator",
  "prepared_report": 0,
  "ref_doctype": "GL Entry",
  "report_name": "Productive Report",
  "report_type": "Script Report",
- "roles": [
-  {
-   "role": "Accounts User"
-  },
-  {
-   "role": "Accounts Manager"
-  },
-  {
-   "role": "Auditor"
-  }
- ],
+ "roles": [],
  "timeout": 0
 }
