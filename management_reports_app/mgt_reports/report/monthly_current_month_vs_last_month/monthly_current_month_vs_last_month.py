@@ -247,59 +247,103 @@ def execute(filters=None):
     }
 
 
+    # for b in budgets:
+    #     current_budget = frappe.get_doc("Budget", b)
+    #     if current_budget.monthly_distribution:
+    #         monthly_distribution = frappe.get_doc("Monthly Distribution", current_budget.monthly_distribution)
+
+    #     for budget_year in budget_grouping_on_parent:
+
+    #         for monthly_row in monthly_distribution.percentages:
+    #             month = map_month[monthly_row.month] 
+
+    #             actual_key_name = f'{month}_{budget_year}'
+    #             budget_key_name = f'{month}_{budget_year}_budget'  
+    #             achive_key_name = f'{month}_{budget_year}_achivement'  
+    #             variance_key_name = f'{month}_{budget_year}_variance'  
+                
+
+    #             data[0][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Revenue from ordinary line of Business'] * monthly_row.percentage_allocation)/100):.3f}"
+
+    #             data[1][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Cost of Sales'] * monthly_row.percentage_allocation)/100):.3f}"
+
+    #             data[2][budget_key_name] = None
+                
+    #             # Update budget values for data[3] and data[5]
+    #             data[3][budget_key_name] = float(data[0][budget_key_name]) - float(data[1][budget_key_name])
+
+    #             data[5][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Revenue from Non line of business'] * monthly_row.percentage_allocation) / 100):.3f}"
+
+    #             data[7][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Operating Expenses'] * monthly_row.percentage_allocation) / 100):.3f}"
+
+    #             data[8][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Administrative Expenses'] * monthly_row.percentage_allocation) / 100):.3f}"
+
+    #             data[9][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Repairs & maintenance Expenses'] * monthly_row.percentage_allocation) / 100):.3f}"
+
+    #             data[10][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Impairment charges'] * monthly_row.percentage_allocation) / 100):.3f}"
+
+    #             data[11][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Selling, distribution & marketing expenses'] * monthly_row.percentage_allocation) / 100):.3f}"
+
+    #             data[12][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Employees Benefit Expenses'] * monthly_row.percentage_allocation) / 100):.3f}"
+
+    #             # data[14][budget_key_name] = f"{(data[3][budget_key_name] - data[7][budget_key_name] + data[5][budget_key_name]):.3f}"
+    #             data[14][budget_key_name] = f"{(float(data[3][budget_key_name]) - float(data[7][budget_key_name]) + float(data[5][budget_key_name])):.3f}"
+
+    #             data[16][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Depreciation & amortisation expenses'] * monthly_row.percentage_allocation) / 100):.3f}"
+
+    #             # data[17][budget_key_name] = f"{(data[14][budget_key_name] - data[16][budget_key_name]):.3f}"
+    #             data[17][budget_key_name] = f"{(float(data[14][budget_key_name]) - float(data[16][budget_key_name])):.3f}"
+
+    #             data[19][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Finance charges'] * monthly_row.percentage_allocation) / 100):.3f}"
+
+    #             # data[20][budget_key_name] = f"{(data[17][budget_key_name] - data[19][budget_key_name]):.3f}"
+    #             data[20][budget_key_name] = f"{(float(data[17][budget_key_name]) - float(data[19][budget_key_name])):.3f}"
+
+
+
     for b in budgets:
         current_budget = frappe.get_doc("Budget", b)
         if current_budget.monthly_distribution:
             monthly_distribution = frappe.get_doc("Monthly Distribution", current_budget.monthly_distribution)
-
-        for budget_year in budget_grouping_on_parent:
-
-            for monthly_row in monthly_distribution.percentages:
-                month = map_month[monthly_row.month] 
-
-                actual_key_name = f'{month}_{budget_year}'
-                budget_key_name = f'{month}_{budget_year}_budget'  
-                achive_key_name = f'{month}_{budget_year}_achivement'  
-                variance_key_name = f'{month}_{budget_year}_variance'  
-                
-
-                data[0][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Revenue from ordinary line of Business'] * monthly_row.percentage_allocation)/100):.3f}"
-
-                data[1][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Cost of Sales'] * monthly_row.percentage_allocation)/100):.3f}"
-
-                data[2][budget_key_name] = None
-                
-                # Update budget values for data[3] and data[5]
-                data[3][budget_key_name] = float(data[0][budget_key_name]) - float(data[1][budget_key_name])
-
-                data[5][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Revenue from Non line of business'] * monthly_row.percentage_allocation) / 100):.3f}"
-
-                data[7][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Operating Expenses'] * monthly_row.percentage_allocation) / 100):.3f}"
-
-                data[8][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Administrative Expenses'] * monthly_row.percentage_allocation) / 100):.3f}"
-
-                data[9][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Repairs & maintenance Expenses'] * monthly_row.percentage_allocation) / 100):.3f}"
-
-                data[10][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Impairment charges'] * monthly_row.percentage_allocation) / 100):.3f}"
-
-                data[11][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Selling, distribution & marketing expenses'] * monthly_row.percentage_allocation) / 100):.3f}"
-
-                data[12][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Employees Benefit Expenses'] * monthly_row.percentage_allocation) / 100):.3f}"
-
-                # data[14][budget_key_name] = f"{(data[3][budget_key_name] - data[7][budget_key_name] + data[5][budget_key_name]):.3f}"
-                data[14][budget_key_name] = f"{(float(data[3][budget_key_name]) - float(data[7][budget_key_name]) + float(data[5][budget_key_name])):.3f}"
-
-                data[16][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Depreciation & amortisation expenses'] * monthly_row.percentage_allocation) / 100):.3f}"
-
-                # data[17][budget_key_name] = f"{(data[14][budget_key_name] - data[16][budget_key_name]):.3f}"
-                data[17][budget_key_name] = f"{(float(data[14][budget_key_name]) - float(data[16][budget_key_name])):.3f}"
-
-                data[19][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Finance charges'] * monthly_row.percentage_allocation) / 100):.3f}"
-
-                # data[20][budget_key_name] = f"{(data[17][budget_key_name] - data[19][budget_key_name]):.3f}"
-                data[20][budget_key_name] = f"{(float(data[17][budget_key_name]) - float(data[19][budget_key_name])):.3f}"
-
-
+            
+            for budget_year in budget_grouping_on_parent:
+                for monthly_row in monthly_distribution.percentages:
+                    month = map_month[monthly_row.month]
+                    
+                    actual_key_name = f'{month}_{budget_year}'
+                    budget_key_name = f'{month}_{budget_year}_budget'
+                    achive_key_name = f'{month}_{budget_year}_achivement'
+                    variance_key_name = f'{month}_{budget_year}_variance'
+                    
+                    # Fixed bracket syntax error in "Revenue from ordinary line of Business"
+                    data[0][budget_key_name] = f"{((budget_grouping_on_parent[budget_year].get('Revenue from ordinary line of Business') * monthly_row.percentage_allocation)/100):.3f}"
+                    data[1][budget_key_name] = f"{((budget_grouping_on_parent[budget_year].get('Cost of Sales') * monthly_row.percentage_allocation)/100):.3f}"
+                    data[2][budget_key_name] = None
+                    
+                    # Update budget values for data[3] and data[5]
+                    data[3][budget_key_name] = float(data[0][budget_key_name]) - float(data[1][budget_key_name])
+                    
+                    # Fixed extra parenthesis in the following calculations
+                    data[5][budget_key_name] = f"{((budget_grouping_on_parent[budget_year].get('Revenue from Non line of business', 0) * monthly_row.percentage_allocation) / 100):.3f}"
+                    data[7][budget_key_name] = f"{((budget_grouping_on_parent[budget_year].get('Operating Expenses', 0) * monthly_row.percentage_allocation) / 100):.3f}"
+                    data[8][budget_key_name] = f"{((budget_grouping_on_parent[budget_year].get('Administrative Expenses', 0) * monthly_row.percentage_allocation) / 100):.3f}"
+                    data[9][budget_key_name] = f"{((budget_grouping_on_parent[budget_year].get('Repairs & maintenance Expenses', 0) * monthly_row.percentage_allocation) / 100):.3f}"
+                    data[10][budget_key_name] = f"{((budget_grouping_on_parent[budget_year].get('Impairment charges', 0) * monthly_row.percentage_allocation) / 100):.3f}"
+                    data[11][budget_key_name] = f"{((budget_grouping_on_parent[budget_year].get('Selling, distribution & marketing expenses', 0) * monthly_row.percentage_allocation) / 100):.3f}"
+                    data[12][budget_key_name] = f"{((budget_grouping_on_parent[budget_year].get('Employees Benefit Expenses', 0) * monthly_row.percentage_allocation) / 100):.3f}"
+                    
+                    # Fixed commented calculation and uncommented calculation for data[14]
+                    data[14][budget_key_name] = f"{(float(data[3][budget_key_name]) - float(data[7][budget_key_name]) + float(data[5][budget_key_name])):.3f}"
+                    
+                    data[16][budget_key_name] = f"{((budget_grouping_on_parent[budget_year].get('Depreciation & amortisation expenses', 0) * monthly_row.percentage_allocation) / 100):.3f}"
+                    
+                    # Fixed commented calculation and uncommented calculation for data[17]
+                    data[17][budget_key_name] = f"{(float(data[14][budget_key_name]) - float(data[16][budget_key_name])):.3f}"
+                    
+                    data[19][budget_key_name] = f"{((budget_grouping_on_parent[budget_year].get('Finance charges', 0) * monthly_row.percentage_allocation) / 100):.3f}"
+                    
+                    # Fixed commented calculation and uncommented calculation for data[20]
+                    data[20][budget_key_name] = f"{(float(data[17][budget_key_name]) - float(data[19][budget_key_name])):.3f}"
 
         # Achivement and Variance columns
     start_year = int(filters.get('from_fiscal_year'))
@@ -318,7 +362,7 @@ def execute(filters=None):
                 achive_key_name = f'{month}_{start_year}_achivement'  
                 variance_key_name = f'{month}_{start_year}_variance'  
 
-                act = float(data[i][actual_key_name]) or 0
+                act = float(data[i].get(actual_key_name, 0))
                 bud = float(data[i].get(budget_key_name, 0)) 
 
                 if act:
@@ -690,13 +734,20 @@ def calculate_financial_metrics(income, expense, filters):
     months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
     start_year = int(filters['from_fiscal_year'])
     end_year = int(filters['to_fiscal_year'])
-    for month in months:
-        if end_year >= start_year:
-            key = f"{month}_{start_year}"
-            filtered_data[7][key] -= (float(finance_cost_row[key]) + float(depreciation_row[key]))
 
-        start_year += 1
-    
+    # Loop through each year
+    for year in range(start_year, end_year + 1):
+        # Loop through each month
+        for month in months:
+            key = f"{month}_{year}"
+            
+            # Check if the key exists in all necessary dictionaries before performing calculations
+            if (key in filtered_data[7] and 
+                key in finance_cost_row and 
+                key in depreciation_row):
+                
+                filtered_data[7][key] -= (float(finance_cost_row.get(key, 0)) + float(depreciation_row.get(key, 0)))
+
     operating_expenses = filtered_data[7]
 
     

@@ -223,51 +223,63 @@ def execute(filters=None):
             monthly_distribution = frappe.get_doc("Monthly Distribution", current_budget.monthly_distribution)
 
         for budget_year in budget_grouping_on_parent:
-
             for monthly_row in monthly_distribution.percentages:
-                month = map_month[monthly_row.month] 
+                month = map_month.get(monthly_row.month, 'Unknown')
 
                 actual_key_name = f'{month}_{budget_year}'
-                budget_key_name = f'{month}_{budget_year}_budget'  
-                achive_key_name = f'{month}_{budget_year}_achivement'  
-                variance_key_name = f'{month}_{budget_year}_variance'  
-                
+                budget_key_name = f'{month}_{budget_year}_budget'
+                achive_key_name = f'{month}_{budget_year}_achivement'
+                variance_key_name = f'{month}_{budget_year}_variance'
 
-                data[0][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Revenue from ordinary line of Business'] * monthly_row.percentage_allocation)/100):.3f}"
+                def calc(key):
+                    return (budget_grouping_on_parent[budget_year].get(key, 0) * monthly_row.percentage_allocation) / 100
 
-                data[1][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Cost of Sales'] * monthly_row.percentage_allocation)/100):.3f}"
-
+                data[0][budget_key_name] = f"{calc('Revenue from ordinary line of Business'):.3f}"
+                data[1][budget_key_name] = f"{calc('Cost of Sales'):.3f}"
                 data[2][budget_key_name] = None
-                
-                # Update budget values for data[3] and data[5]
-                data[3][budget_key_name] = float(data[0][budget_key_name]) - float(data[1][budget_key_name])
 
-                data[5][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Revenue from Non line of business'] * monthly_row.percentage_allocation) / 100):.3f}"
+                # Safely compute floats
+                try:
+                    d0 = float(data[0].get(budget_key_name, 0.0))
+                    d1 = float(data[1].get(budget_key_name, 0.0))
+                    data[3][budget_key_name] = d0 - d1
+                except Exception:
+                    data[3][budget_key_name] = 0.0
 
-                data[7][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Operating Expenses'] * monthly_row.percentage_allocation) / 100):.3f}"
+                data[5][budget_key_name] = f"{calc('Revenue from Non line of business'):.3f}"
+                data[7][budget_key_name] = f"{calc('Operating Expenses'):.3f}"
+                data[8][budget_key_name] = f"{calc('Administrative Expenses'):.3f}"
+                data[9][budget_key_name] = f"{calc('Repairs & maintenance Expenses'):.3f}"
+                data[10][budget_key_name] = f"{calc('Impairment charges'):.3f}"
+                data[11][budget_key_name] = f"{calc('Selling, distribution & marketing expenses'):.3f}"
+                data[12][budget_key_name] = f"{calc('Employees Benefit Expenses'):.3f}"
+                data[16][budget_key_name] = f"{calc('Depreciation & amortisation expenses'):.3f}"
+                data[19][budget_key_name] = f"{calc('Finance charges'):.3f}"
 
-                data[8][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Administrative Expenses'] * monthly_row.percentage_allocation) / 100):.3f}"
+                # Calculate data[14]
+                try:
+                    d3 = float(data[3].get(budget_key_name, 0.0))
+                    d5 = float(data[5].get(budget_key_name, 0.0))
+                    d7 = float(data[7].get(budget_key_name, 0.0))
+                    data[14][budget_key_name] = f"{(d3 - d7 + d5):.3f}"
+                except Exception:
+                    data[14][budget_key_name] = f"{0.0:.3f}"
 
-                data[9][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Repairs & maintenance Expenses'] * monthly_row.percentage_allocation) / 100):.3f}"
+                # Calculate data[17]
+                try:
+                    d14 = float(data[14].get(budget_key_name, 0.0))
+                    d16 = float(data[16].get(budget_key_name, 0.0))
+                    data[17][budget_key_name] = f"{(d14 - d16):.3f}"
+                except Exception:
+                    data[17][budget_key_name] = f"{0.0:.3f}"
 
-                data[10][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Impairment charges'] * monthly_row.percentage_allocation) / 100):.3f}"
-
-                data[11][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Selling, distribution & marketing expenses'] * monthly_row.percentage_allocation) / 100):.3f}"
-
-                data[12][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Employees Benefit Expenses'] * monthly_row.percentage_allocation) / 100):.3f}"
-
-                # data[14][budget_key_name] = f"{(data[3][budget_key_name] - data[7][budget_key_name] + data[5][budget_key_name]):.3f}"
-                data[14][budget_key_name] = f"{(float(data[3][budget_key_name]) - float(data[7][budget_key_name]) + float(data[5][budget_key_name])):.3f}"
-
-                data[16][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Depreciation & amortisation expenses'] * monthly_row.percentage_allocation) / 100):.3f}"
-
-                # data[17][budget_key_name] = f"{(data[14][budget_key_name] - data[16][budget_key_name]):.3f}"
-                data[17][budget_key_name] = f"{(float(data[14][budget_key_name]) - float(data[16][budget_key_name])):.3f}"
-
-                data[19][budget_key_name] = f"{((budget_grouping_on_parent[budget_year]['Finance charges'] * monthly_row.percentage_allocation) / 100):.3f}"
-
-                # data[20][budget_key_name] = f"{(data[17][budget_key_name] - data[19][budget_key_name]):.3f}"
-                data[20][budget_key_name] = f"{(float(data[17][budget_key_name]) - float(data[19][budget_key_name])):.3f}"
+                # Calculate data[20]
+                try:
+                    d17 = float(data[17].get(budget_key_name, 0.0))
+                    d19 = float(data[19].get(budget_key_name, 0.0))
+                    data[20][budget_key_name] = f"{(d17 - d19):.3f}"
+                except Exception:
+                    data[20][budget_key_name] = f"{0.0:.3f}"
 
 
 
@@ -288,7 +300,7 @@ def execute(filters=None):
                 achive_key_name = f'{month}_{start_year}_achivement'  
                 variance_key_name = f'{month}_{start_year}_variance'  
 
-                act = float(data[i][actual_key_name]) or 0
+                act = float(data[i].get(actual_key_name, 0)) or 0
                 bud = float(data[i].get(budget_key_name, 0)) 
 
                 if act:
@@ -297,6 +309,12 @@ def execute(filters=None):
                     data[i][achive_key_name] = 0
 
                 data[i][variance_key_name] = act - bud
+
+                
+                empty_row[actual_key_name] = None
+                empty_row[budget_key_name] = None
+                empty_row[achive_key_name] = None
+                empty_row[variance_key_name] = None
 
                 
         start_year += 1
@@ -324,22 +342,25 @@ def execute(filters=None):
 
                 main_columns = [actual_key_name, budget_key_name, achive_key_name, variance_key_name]
 
-                for column in main_columns:
 
+                for column in main_columns:
                     empty_row[column] = None
 
-                    revenue_col = float(data[0].get(column, 0))
-                    cos_col = float(data[1].get(column, 0))
-                    hr_col = float(data[12].get(column, 0))
-                    admin_col = float(data[8].get(column, 0)) + float(data[9].get(column, 0))
-                    marketing_col = float(data[11].get(column, 0))
-                    ebita_margin_col = float(data[14].get(column, 0))
+                    # Safely cast each to float, using 0.0 if value is None or missing
+                    revenue_col = float(data[0].get(column) or 0.0)
+                    cos_col = float(data[1].get(column) or 0.0)
+                    hr_col = float(data[12].get(column) or 0.0)
+                    admin_col = float(data[8].get(column) or 0.0) + float(data[9].get(column) or 0.0)
+                    marketing_col = float(data[11].get(column) or 0.0)
+                    ebita_margin_col = float(data[14].get(column) or 0.0)
 
+                    # Calculate and format percentages safely
                     cos_margin_row[column] = f"{(cos_col / revenue_col) * 100:.2f}%" if revenue_col else "0.00%"
                     hr_row[column] = f"{(hr_col / revenue_col) * 100:.2f}%" if revenue_col else "0.00%"
                     admin_cost_margin[column] = f"{(admin_col / revenue_col) * 100:.2f}%" if revenue_col else "0.00%"
                     marketing_row[column] = f"{(marketing_col / revenue_col) * 100:.2f}%" if revenue_col else "0.00%"
                     ebita_margin[column] = f"{(ebita_margin_col / revenue_col) * 100:.2f}%" if revenue_col else "0.00%"
+
 
             start_year += 1
 
@@ -559,7 +580,7 @@ def calculate_financial_metrics(income, expense, filters):
     for month in months:
         if end_year >= start_year:
             key = f"{month}_{start_year}"
-            filtered_data[7][key] -= (float(finance_cost_row[key]) + float(depreciation_row[key]))
+            filtered_data[7][key] -= (float(finance_cost_row.get(key, 0)) + float(depreciation_row.get(key, 0)))
 
         start_year += 1
     
