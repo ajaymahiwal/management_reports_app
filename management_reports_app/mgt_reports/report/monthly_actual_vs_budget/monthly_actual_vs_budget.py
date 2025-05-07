@@ -199,6 +199,7 @@ def execute(filters=None):
             
     data.append(empty_row)
 
+
     # Revenue (line)
     months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
 
@@ -390,42 +391,265 @@ def execute(filters=None):
                 data[20][budget_key_name] = f"{(float(data[17][budget_key_name]) - float(data[19][budget_key_name])):.3f}"
 
 
-        # Achievement and Variance columns
-        start_year = int(filters.get('from_fiscal_year'))
-        end_year = int(filters.get('to_fiscal_year'))
+        
+    frappe.log_error("data[6]", data[6])
 
-        while(start_year <= end_year):
-            for i, row in enumerate(data):
-                if not row.get('account'):  # Added .get() for safety
-                    continue
+    data[6]['is_group'] = 0
+    for key,value in data[6].items():
+        data[6][key] = None
 
-                for month in months:
-                    actual_key_name = f'{month}_{start_year}'
-                    budget_key_name = f'{month}_{start_year}_budget'  
-                    achive_key_name = f'{month}_{start_year}_achivement'  
-                    variance_key_name = f'{month}_{start_year}_variance'  
+    data[7]['indent'] = 0
+    data[8]['indent'] = 0
+    data[9]['indent'] = 0
 
-                    # Fix: Use 0 as default within get() method to ensure we always have a number
-                    act = float(row.get(actual_key_name, 0))
-                    bud = float(row.get(budget_key_name, 0)) 
 
+    operat_exp = {'account': "Operating Expenses", 'account_name': "Operating Expenses",'indent': 0.0}
+
+    #  # Achievement and Variance columns
+    # start_year = int(filters.get('from_fiscal_year'))
+    # end_year = int(filters.get('to_fiscal_year'))
+    # while(start_year <= end_year):
+    #     for i, row in enumerate(data):
+    #         if not row.get('account'):  # Added .get() for safety
+    #             continue
+
+    #         for month in months:
+    #             actual_key_name = f'{month}_{start_year}'
+    #             budget_key_name = f'{month}_{start_year}_budget'
+
+    #             operat_exp[actual_key_name] = (
+    #                 float(data[7][actual_key_name]) +
+    #                 float(data[8][actual_key_name]) +
+    #                 float(data[9][actual_key_name])
+    #             )
+
+    #             operat_exp[budget_key_name] = (
+    #                 float(data[7][budget_key_name]) +
+    #                 float(data[8][budget_key_name]) +
+    #                 float(data[9][budget_key_name])
+    #             )
+
+    #             data[11][actual_key_name] = float(data[3][actual_key_name]) - operat_exp[actual_key_name]
+    #             data[11][budget_key_name] = float(data[3][budget_key_name]) - operat_exp[budget_key_name]
+
+    #             data[14][actual_key_name] = float(data[3][actual_key_name]) - float(data[11][actual_key_name])
+    #             data[14][budget_key_name] = float(data[3][budget_key_name]) - float(data[11][budget_key_name])
+
+    #             data[17][actual_key_name] = float(data[14][actual_key_name]) - float(data[16][actual_key_name])
+    #             data[17][budget_key_name] = float(data[14][budget_key_name]) - float(data[16][budget_key_name])
+
+    #     start_year+=1
+
+
+    # # data[5] = empty_row
+    
+    # data.insert(11,operat_exp)
+    # data.insert(12, empty_row)
+
+    # # Achievement and Variance columns
+    # start_year = int(filters.get('from_fiscal_year'))
+    # end_year = int(filters.get('to_fiscal_year'))
+
+    # while start_year <= end_year:
+    #     for i, row in enumerate(data):
+    #         if not row.get('account'):  # Skip if 'account' is missing or falsy
+    #             continue
+
+    #         for month in months:
+    #             actual_key_name = f'{month}_{start_year}'
+    #             budget_key_name = f'{month}_{start_year}_budget'  
+    #             achieve_key_name = f'{month}_{start_year}_achievement'  
+    #             variance_key_name = f'{month}_{start_year}_variance'  
+
+    #             # Use 0 as default to ensure numeric calculation
+    #             act = float(row.get(actual_key_name, 0))
+    #             bud = float(row.get(budget_key_name, 0)) 
+
+    #             # Calculate achievement percentage
+    #             # if act != 0 and bud != 0:  # Avoid division by zero
+    #             #     data[i][achieve_key_name] = f"{(((act - bud) / act) * 100.0):.3f}"
+    #             # else:
+    #             #     data[i][achieve_key_name] = "0.000"
+
+    #             if act != 0:
+    #                 data[i][achieve_key_name] = (bud / act)*100
+    #             else:
+    #                 data[i][achieve_key_name] = 0.0
+
+
+    #             # Calculate variance
+    #             data[i][variance_key_name] = act - bud
+
+    #     start_year += 1
+
+
+    # #     # Make sure index 4 exists before accessing it
+    # # if len(data) > 4:
+    # #     for key in data[4].keys():
+    # #         data[4][key] = None
+    # index_to_remove = [5, 6, 19]
+    # updated_list = [element for i, element in enumerate(data) if i not in index_to_remove]
+
+    # start_year = int(filters.get('from_fiscal_year'))
+    # end_year = int(filters.get('to_fiscal_year'))
+
+    # while(start_year <= end_year):
+    #     for i, row in enumerate(updated_list):
+    #         if not row.get('account'):  # Added .get() for safety
+    #             continue
+
+    #         for month in months:
+    #             actual_key_name = f'{month}_{start_year}'
+    #             budget_key_name = f'{month}_{start_year}_budget'
+
+    #             updated_list[2][budget_key_name] = None
+    #             updated_list[4][budget_key_name] = None
+    #             updated_list[10][budget_key_name] = None
+    #             updated_list[12][budget_key_name] = None
+    #             updated_list[20][budget_key_name] = None
+
+    #     start_year+=1
+
+
+    # frappe.log_error("data", updated_list)
+    # return columns, updated_list, None, None, None, None
+
+
+
+    start_year = int(filters.get('from_fiscal_year'))
+    end_year = int(filters.get('to_fiscal_year'))
+
+    while(start_year <= end_year):
+        for i, row in enumerate(data):
+            if not row.get('account'):  # Skip if 'account' is missing
+                continue
+
+            for month in months:
+                actual_key_name = f'{month}_{start_year}'
+                budget_key_name = f'{month}_{start_year}_budget'
+
+                # Check if all required keys exist before performing calculations
+                # For operating expenses calculation
+                if (actual_key_name in data[7] and actual_key_name in data[8] and actual_key_name in data[9] and
+                    budget_key_name in data[7] and budget_key_name in data[8] and budget_key_name in data[9]):
+                    
+                    operat_exp[actual_key_name] = (
+                        float(data[7].get(actual_key_name, 0)) +
+                        float(data[8].get(actual_key_name, 0)) +
+                        float(data[9].get(actual_key_name, 0))
+                    )
+
+                    operat_exp[budget_key_name] = (
+                        float(data[7].get(budget_key_name, 0)) +
+                        float(data[8].get(budget_key_name, 0)) +
+                        float(data[9].get(budget_key_name, 0))
+                    )
+                else:
+                    # Handle missing data - set to defaults
+                    if actual_key_name not in operat_exp:
+                        operat_exp[actual_key_name] = 0.0
+                    if budget_key_name not in operat_exp:
+                        operat_exp[budget_key_name] = 0.0
+
+                # Only perform calculations if keys exist
+                if (actual_key_name in data[3] and budget_key_name in data[3]):
+                    # Calculate data[11] values (appears to be operating profit)
+                    data[11][actual_key_name] = float(data[3].get(actual_key_name, 0)) - operat_exp.get(actual_key_name, 0)
+                    
+                    # Only set budget value if it exists
+                    if budget_key_name in operat_exp:
+                        data[11][budget_key_name] = float(data[3].get(budget_key_name, 0)) - operat_exp.get(budget_key_name, 0)
+
+                    # Calculate data[14] values (appears to be a financial metric)
+                    data[14][actual_key_name] = float(data[3].get(actual_key_name, 0)) - float(data[11].get(actual_key_name, 0))
+                    
+                    if budget_key_name in data[11]:
+                        data[14][budget_key_name] = float(data[3].get(budget_key_name, 0)) - float(data[11].get(budget_key_name, 0))
+
+                    # Calculate data[17] values (appears to be a financial metric)
+                    if actual_key_name in data[16]:
+                        data[17][actual_key_name] = float(data[14].get(actual_key_name, 0)) - float(data[16].get(actual_key_name, 0))
+                    
+                    if budget_key_name in data[16]:
+                        data[17][budget_key_name] = float(data[14].get(budget_key_name, 0)) - float(data[16].get(budget_key_name, 0))
+
+        start_year += 1
+
+    # Add operating expenses row to the data
+    data.insert(11, operat_exp)
+    data.insert(12, empty_row)
+
+    # Achievement and Variance columns
+    start_year = int(filters.get('from_fiscal_year'))
+    end_year = int(filters.get('to_fiscal_year'))
+
+    while start_year <= end_year:
+        for i, row in enumerate(data):
+            if not row.get('account'):  # Skip if 'account' is missing
+                continue
+
+            for month in months:
+                actual_key_name = f'{month}_{start_year}'
+                budget_key_name = f'{month}_{start_year}_budget'  
+                achieve_key_name = f'{month}_{start_year}_achievement'  
+                variance_key_name = f'{month}_{start_year}_variance'  
+
+                # Use 0 as default to ensure numeric calculation
+                act = float(row.get(actual_key_name, 0))
+                
+                # Only calculate if budget exists for this period
+                if budget_key_name in row:
+                    bud = float(row.get(budget_key_name, 0))
+                    
                     # Calculate achievement percentage
-                    if act != 0 and bud != 0:  # Avoid division by zero
-                        data[i][achive_key_name] = f"{(((act - bud) / act) * 100.0):.3f}"
+                    if act != 0:
+                        row[achieve_key_name] = (bud / act) * 100
                     else:
-                        data[i][achive_key_name] = "0.000"
-
+                        row[achieve_key_name] = 0.0
+                    
                     # Calculate variance
-                    data[i][variance_key_name] = act - bud
-                        
-            start_year += 1
+                    row[variance_key_name] = act - bud
+                else:
+                    # Handle missing budget data
+                    row[achieve_key_name] = None  # or some default/placeholder value
+                    row[variance_key_name] = None  # or some default/placeholder value
 
-        # Make sure index 4 exists before accessing it
-        if len(data) > 4:
-            for key in data[4].keys():
-                data[4][key] = None
+        start_year += 1
 
-    return columns, data, None, None, None, None
+    # Remove specific indexes
+    index_to_remove = [5, 6]
+    updated_list = [element for i, element in enumerate(data) if i not in index_to_remove]
+
+    # Set specific budget keys to None
+    start_year = int(filters.get('from_fiscal_year'))
+    end_year = int(filters.get('to_fiscal_year'))
+
+    while(start_year <= end_year):
+        for month in months:
+            budget_key_name = f'{month}_{start_year}_budget'
+            
+            # Set specific rows' budget values to None (safely)
+            for idx in [2, 4, 10, 12, 20]:
+                if idx < len(updated_list) and budget_key_name in updated_list[idx]:
+                    updated_list[idx][budget_key_name] = None
+
+        start_year += 1
+
+
+
+    # other_income_row =  None
+    # for inc in income:
+    #         if inc.get('indent') == 1.0 and "Non line".lower() in inc.get('account').lower():
+    #             inc['account_name'] = "Other Income"
+    #             inc['account'] = "Other Income"
+    #             inc['indent'] = 0.0
+    #             other_income_row = inc
+
+    # updated_list.insert(5, other_income_row)
+    # updated_list.insert(6, empty_row)
+    
+    frappe.log_error("data", updated_list)
+    return columns, updated_list, None, None, None, None
 
 
 def get_columns(periodicity, period_list, accumulated_values=0, company=None, cash_flow=False):
@@ -467,7 +691,7 @@ def get_columns(periodicity, period_list, accumulated_values=0, company=None, ca
                 "width": 150,
             },
             {
-                "fieldname": f"{period.key}_achivement",
+                "fieldname": f"{period.key}_achievement",
                 "label": f"% Ach ({period.label})",
                 "fieldtype": "Percent",
                 "width": 150,

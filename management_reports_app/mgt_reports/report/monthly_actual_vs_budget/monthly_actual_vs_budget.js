@@ -91,6 +91,12 @@ management_reports_app.monthly_actual_vs_budget = {
         // First apply the default formatting
         value = default_formatter(value, row, column, data);
 
+		// Match fieldname exactly
+		// if (column.fieldname && column.fieldname.endsWith('_achievement')) {
+		// 	return `<span">${value}%</span>`;
+		// }
+	
+
         // Base styling for all cells
         let style = {
             display: 'block',
@@ -130,7 +136,7 @@ management_reports_app.monthly_actual_vs_budget = {
                 "Gross Profit",
                 "EBIT",
                 "EBITDA",
-                "Operating Expense",
+                "Operating Expenses",
                 "Profit Before Tax"
             ];
 
@@ -152,17 +158,18 @@ management_reports_app.monthly_actual_vs_budget = {
 
 
             if (profitAndLossAccounts.includes(data.account)) {
-                if (column.fieldname && column.fieldname.includes('account')) {
-                    style.backgroundColor = '#f8f9fa';  // Light gray background
-                    style.fontSize = '16px';
-                    style.padding = '0px';
-                    style.height = '40px';
-                }else{
-					const numericValue = parseFloat(String(data[column.fieldname]).replace(/[^\d.-]/g, ''));
-                    style.color = numericValue >= 0 ? '#1cb408' : '#eb1f1f';
-                    style.backgroundColor = numericValue >= 0 ? '#e8f5e9' : '#ffebee';
-                    style.fontWeight = 'bold';
-				}
+                // if (column.fieldname && column.fieldname.includes('account')) {
+                //     style.backgroundColor = '#f8f9fa';  // Light gray background
+                //     style.fontSize = '16px';
+                //     style.padding = '0px';
+                //     style.height = '40px';
+                // }else{
+				// 	const numericValue = parseFloat(String(data[column.fieldname]).replace(/[^\d.-]/g, ''));
+                //     style.color = numericValue >= 0 ? '#1cb408' : '#eb1f1f';
+                //     style.backgroundColor = numericValue >= 0 ? '#e8f5e9' : '#ffebee';
+                //     style.fontWeight = 'bold';
+				// }
+				return ""
             }
         }
 
